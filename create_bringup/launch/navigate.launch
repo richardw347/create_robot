@@ -1,0 +1,11 @@
+<launch>
+    <!-- Map server -->
+    <arg name="map_file" default="$(find create_bringup)/maps/dawes_basement.yaml"/>
+    <node pkg="map_server" name="map_server"  type="map_server" args="$(arg map_file)" />
+
+    <!-- AMCL used for localization -->
+    <include file="$(find create_bringup)/launch/include/amcl.launch" />
+    
+    <!-- Move base used for navigation -->
+    <include file="$(find create_bringup)/launch/include/move_base.launch" />
+</launch>

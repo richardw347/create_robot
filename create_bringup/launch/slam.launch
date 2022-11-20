@@ -1,0 +1,7 @@
+<launch>
+
+  <node pkg="slam_karto" type="slam_karto" name="slam_karto" output="screen">
+    <param name="odom_frame" value="odom" />
+  </node>
+
+</launch>

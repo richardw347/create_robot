@@ -10,4 +10,9 @@
 
   <!-- Robot description -->
   <include if="$(arg desc)" file="$(find create_description)/launch/create_2.launch" />
+
+  <include file="$(find create_bringup)/launch/joy_teleop.launch" />
+  <include file="$(find create_bringup)/launch/urg.launch" />
+  <include file="$(find create_bringup)/launch/realsense.launch" />
+  
 </launch>

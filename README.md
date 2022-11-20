@@ -1,18 +1,32 @@
 # create_robot
 
+## Shoebot Dependencies
+
+```bash
+ros-noetic-desktop-full
+ros-noetic-joy
+ros-noetic-joy-teleop
+ros-noetic-realsense2-camera
+ros-noetic-urg-c
+ros-noetic-laser-proc
+ros-noetic-slam-karto
+ros-noetic-navigation
+ros-noetic-map-server
+```
+
 [ROS](http://ros.org) driver for iRobot [Create 1 and 2](http://www.irobot.com/About-iRobot/STEM/Create-2.aspx).
 This package wraps the C++ library [libcreate][libcreate], which uses iRobot's [Open Interface Specification][oi_spec].
 
 <!--[](* Documentation: TODO)-->
-* ROS wiki page: http://wiki.ros.org/create_robot
+* ROS wiki page: <http://wiki.ros.org/create_robot>
 * Support: [ROS Answers (tag: create_robot)](http://answers.ros.org/questions/scope:all/sort:activity-desc/tags:create_robot/page:1/)
 * Author: [Jacob Perron](http://jacobperron.ca) ([Autonomy Lab](http://autonomylab.org), [Simon Fraser University](http://www.sfu.ca))
 
 ## Build Status
 
-- ROS Kinetic ![](https://github.com/autonomylab/create_robot/workflows/Continuous%20Integration/badge.svg?branch=kinetic)
-- ROS Melodic ![](https://github.com/autonomylab/create_robot/workflows/Continuous%20Integration/badge.svg?branch=melodic)
-- ROS Foxy ![](https://github.com/autonomylab/create_robot/workflows/Continuous%20Integration/badge.svg?branch=foxy)
+* ROS Kinetic ![](https://github.com/autonomylab/create_robot/workflows/Continuous%20Integration/badge.svg?branch=kinetic)
+* ROS Melodic ![](https://github.com/autonomylab/create_robot/workflows/Continuous%20Integration/badge.svg?branch=melodic)
+* ROS Foxy ![](https://github.com/autonomylab/create_robot/workflows/Continuous%20Integration/badge.svg?branch=foxy)
 
 ## Supported Robots
 
@@ -68,41 +82,48 @@ _* Not verified. Anyone who is able to verify that this driver works or not is e
 * Ubuntu packages: `python-rosdep`, `python-catkin-tools`
 
 ``` bash
-$ sudo apt-get install python-rosdep python-catkin-tools
+sudo apt-get install python-rosdep python-catkin-tools
 ```
 
 #### Compiling
 
 1. Create a catkin workspace  
+
     ``` bash
-    $ cd ~
-    $ mkdir -p create_ws/src  
-    $ cd create_ws  
-    $ catkin init  
+    cd ~
+    mkdir -p create_ws/src  
+    cd create_ws  
+    catkin init  
     ```
 
 2. Clone this repo  
+
     ``` bash
-    $ cd ~/create_ws/src
-    $ git clone https://github.com/autonomylab/create_robot.git
+    cd ~/create_ws/src
+    git clone https://github.com/autonomylab/create_robot.git
     ```
   
 3. Install dependencies  
+
     ``` bash
-    $ cd ~/create_ws
-    $ rosdep update  
-    $ rosdep install --from-paths src -i  
+    cd ~/create_ws
+    rosdep update  
+    rosdep install --from-paths src -i  
     ```
 
 4. Build  
+
     ``` bash
-    $ cd ~/create_ws
-    $ catkin build
+    cd ~/create_ws
+    catkin build
     ```
+
 #### USB Permissions
+
 5. In order to connect to Create over USB, ensure your user is in the dialout group
+
     ``` bash
-    $ sudo usermod -a -G dialout $USER
+    sudo usermod -a -G dialout $USER
     ```
 
 6. Logout and login for permission to take effect
@@ -112,30 +133,35 @@ $ sudo apt-get install python-rosdep python-catkin-tools
 ### Setup
 
 1. After compiling from source, don't forget to source your workspace:  
+
     ``` bash
-    $ source ~/create_ws/devel/setup.bash
+    source ~/create_ws/devel/setup.bash
     ```
 
 2. Connect computer to Create's 7-pin serial port
-  - If using Create 1, ensure that nothing is connected to Create's DB-25 port
+
+* If using Create 1, ensure that nothing is connected to Create's DB-25 port
 
 3. Launch one of the existing launch files or adapt them to create your own.
 
 ### Launch files
 
 For Create 2 (Roomba 600/700 series):
+
 ``` bash
-$ roslaunch create_bringup create_2.launch
+roslaunch create_bringup create_2.launch
 ```
 
 For Create 1 (Roomba 500 series):
+
 ``` bash
-$ roslaunch create_bringup create_1.launch
+roslaunch create_bringup create_1.launch
 ```
 
 For Roomba 400 series:
+
 ``` bash
-$ roslaunch create_bringup roomba_400.launch
+roslaunch create_bringup roomba_400.launch
 ```
 
 #### Launch file arguments
@@ -146,7 +172,7 @@ $ roslaunch create_bringup roomba_400.launch
 For example, if you would like to disable the robot description and provide a custom configuration file:
 
 ```bash
-$ roslaunch create_bringup create_2.launch config:=/abs/path/to/config.yaml desc:=false
+roslaunch create_bringup create_2.launch config:=/abs/path/to/config.yaml desc:=false
 ```
 
 ### Parameters
@@ -187,7 +213,6 @@ $ roslaunch create_bringup create_2.launch config:=/abs/path/to/config.yaml desc
  `wheeldrop` | At least one of the drive wheels has dropped | [std_msgs/Empty][empty]
  `/tf` | The transform from the `odom` frame to `base_footprint`. Only if the parameter `publish_tf` is `true` | [tf2_msgs/TFMessage](http://docs.ros.org/jade/api/tf2_msgs/html/msg/TFMessage.html)
 
-
 ### Subscribers
 
 Topic       | Description   | Type
@@ -217,16 +242,17 @@ linear.x  (+)     Move forward (m/s)
 angular.z (+)     Rotate counter-clockwise (rad/s)
           (-)     Rotate clockwise (rad/s)
 ```
+
 #### Velocity limits
 
-` -0.5 <= linear.x <= 0.5` and `-4.25 <= angular.z <= 4.25`
+`-0.5 <= linear.x <= 0.5` and `-4.25 <= angular.z <= 4.25`
 
 ### Teleoperation
 
 `create_bringup` comes with a launch file for teleoperating Create with a joystick.
 
 ``` bash
-$ roslaunch create_bringup joy_teleop.launch [joy_config:=xbox360]
+roslaunch create_bringup joy_teleop.launch [joy_config:=xbox360]
 ```
 
 There exists configuration files for the [Xbox 360 wired controller](https://www.amazon.ca/Microsoft-Xbox-360-Wired-Controller/dp/B003ZSN600) and the [Logitech F710 controller](http://gaming.logitech.com/en-ca/product/f710-wireless-gamepad). You can adapt these files for your preferred joystick configuration.
@@ -238,12 +264,12 @@ Contributing to the development and maintenance of _create\_robot_ is encouraged
 ### Contributors
 
 * [Michael Browne](http://brownem.engineer/)
-    - Confirms driver works with Roomba 700 and 800 series.
+  * Confirms driver works with Roomba 700 and 800 series.
 * [Clyde McQueen](https://github.com/clydemcqueen)
-    - Added support for sound ([#37](https://github.com/AutonomyLab/create_robot/pull/37)).
-* [Ben Wolsieffer](https://github.com/lopsided98) 
-    - Added JointState publisher for wheels ([#26](https://github.com/AutonomyLab/create_robot/pull/26)).
-    - Added Create 1 description ([#27](https://github.com/AutonomyLab/create_robot/pull/27)).
+  * Added support for sound ([#37](https://github.com/AutonomyLab/create_robot/pull/37)).
+* [Ben Wolsieffer](https://github.com/lopsided98)
+  * Added JointState publisher for wheels ([#26](https://github.com/AutonomyLab/create_robot/pull/26)).
+  * Added Create 1 description ([#27](https://github.com/AutonomyLab/create_robot/pull/27)).
 
 [libcreate]:  https://github.com/AutonomyLab/libcreate
 [oi_spec]:  https://www.adafruit.com/datasheets/create_2_Open_Interface_Spec.pdf
@@ -253,13 +279,8 @@ Contributing to the development and maintenance of _create\_robot_ is encouraged
 [int16]:  http://docs.ros.org/api/std_msgs/html/msg/Int16.html
 [twist]:  http://docs.ros.org/api/geometry_msgs/html/msg/Twist.html
 [bool]:  http://docs.ros.org/api/std_msgs/html/msg/Bool.html
-[uint8multiarray]:  http://docs.ros.org/api/std_msgs/html/msg/UInt8MultiArray.html
 [float32]:  http://docs.ros.org/api/std_msgs/html/msg/Float32.html
-[create_msgs]:  http://github.com/autonomylab/create_robot/tree/melodic
 [bumper_msg]:  https://github.com/autonomylab/create_robot/blob/melodic/create_msgs/msg/Bumper.msg
 [mode_msg]:  https://github.com/autonomylab/create_robot/blob/melodic/create_msgs/msg/Mode.msg
 [chargingstate_msg]:  https://github.com/autonomylab/create_robot/blob/melodic/create_msgs/msg/ChargingState.msg
 [jointstate_msg]:  http://docs.ros.org/api/sensor_msgs/html/msg/JointState.html
-[definesong_msg]:  https://github.com/autonomylab/create_robot/blob/melodic/create_msgs/msg/DefineSong.msg
-[playsong_msg]:  https://github.com/autonomylab/create_robot/blob/melodic/create_msgs/msg/PlaySong.msg
-[motorsetpoint_msg]:  https://github.com/autonomylab/create_robot/blob/melodic/create_msgs/msg/MotorSetpoint.msg

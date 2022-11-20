@@ -1,0 +1,11 @@
+<launch>
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+        <rosparam file="$(find create_bringup)/config/navigation/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find create_bringup)/config/navigation/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find create_bringup)/config/navigation/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find create_bringup)/config/navigation/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find create_bringup)/config/navigation/base_local_planner_default_params.yaml" command="load" />
+        <rosparam file="$(find create_bringup)/config/navigation/move_base_params.yaml" command="load" />
+        <rosparam file="$(find create_bringup)/config/navigation/navfn_global_planner.yaml" command="load" />
+    </node>
+</launch>
