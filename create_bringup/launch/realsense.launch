@@ -8,8 +8,8 @@
   <arg name="initial_reset"             default="false"/>
   <arg name="reconnect_timeout"         default="6.0"/>
   
-  <node pkg="tf" type="static_transform_publisher" name="base_to_camera1" args="0 0 0 0 0 0 /base_link /camera1_link 100" />
-  <node pkg="tf" type="static_transform_publisher" name="base_to_camera2" args="0 0 0 0 0 0 /base_link /camera2_link 100" />
+  <!-- <node pkg="tf" type="static_transform_publisher" name="base_to_camera1" args="0 0 0 0 0 0 /base_link /camera1_link 100" />
+  <node pkg="tf" type="static_transform_publisher" name="base_to_camera2" args="0 0 0 0 0 0 /base_link /camera2_link 100" /> -->
 
 
   <group ns="$(arg camera1)">
