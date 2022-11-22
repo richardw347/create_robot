@@ -164,6 +164,17 @@ CreateDriver::~CreateDriver()
   delete robot_;
 }
 
+void CreateDriver::handleKeepAlive()
+{
+  if (ros::Time::now() - last_keep_alive_ > ros::Duration(KEEP_ALIVE_PERIOD))
+  {
+    ROS_INFO("[CREATE] Sending keep alive command.");
+    robot_->keepAlive();
+    last_keep_alive_ = ros::Time::now();
+  }
+}
+
+
 void CreateDriver::cmdVelCallback(const geometry_msgs::TwistConstPtr& msg)
 {
   robot_->drive(msg->linear.x, msg->angular.z);
@@ -657,6 +668,7 @@ void CreateDriver::spinOnce()
 {
   update();
   diagnostics_.update();
+  handleKeepAlive();
   ros::spinOnce();
 }
 
