@@ -12,6 +12,8 @@ ros-noetic-laser-proc
 ros-noetic-slam-karto
 ros-noetic-navigation
 ros-noetic-map-server
+ros-noetic-imu-tools
+ros-noetic-robot-localization
 ```
 
 [ROS](http://ros.org) driver for iRobot [Create 1 and 2](http://www.irobot.com/About-iRobot/STEM/Create-2.aspx).

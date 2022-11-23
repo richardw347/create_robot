@@ -31,8 +31,8 @@ class MPU6050:
 
         self.bus.write_byte_data(self.address, PWR_MGMT_1, 0)
 
-        self.temp_pub = rospy.Publisher("imu/temp", Temperature)
-        self.imu_pub = rospy.Publisher("imu/data", Imu)
+        self.temp_pub = rospy.Publisher("imu/temp", Temperature, queue_size=5)
+        self.imu_pub = rospy.Publisher("imu/data_raw", Imu, queue_size=5)
         self.imu_timer = rospy.Timer(rospy.Duration(0.02), self.publish_imu)
         self.temp_timer = rospy.Timer(rospy.Duration(10), self.publish_temp)
 
