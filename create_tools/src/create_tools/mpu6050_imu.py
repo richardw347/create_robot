@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 
 import smbus
+import time
 import rospy
 import numpy as np
 from sensor_msgs.msg import Temperature, Imu
 from tf.transformations import quaternion_about_axis
 from registers import (
     PWR_MGMT_1,
+    PWR_MGMT_2,
     ACCEL_XOUT_H,
     ACCEL_YOUT_H,
     ACCEL_ZOUT_H,
@@ -30,6 +32,8 @@ class MPU6050:
         self.imu_frame = rospy.get_param("~imu_frame", "imu_link")
 
         self.bus.write_byte_data(self.address, PWR_MGMT_1, 0)
+        time.sleep(0.1)
+        self.calibrate()
 
         self.temp_pub = rospy.Publisher("imu/temp", Temperature, queue_size=5)
         self.imu_pub = rospy.Publisher("imu/data_raw", Imu, queue_size=5)
@@ -50,6 +54,38 @@ class MPU6050:
             return -((65535 - val) + 1)
         else:
             return val
+
+    def calibrate(self, n_samples=100):
+        self.gyro_offset = self.sample_gyro(n_samples)
+        self.accel_offset = self.sample_accel(n_samples)
+        rospy.loginfo("Gyro offset: {}".format(self.gyro_offset))
+        rospy.loginfo("Accel offset: {}".format(self.accel_offset))
+
+    def sample_gyro(self, n_samples=100):
+        ret = []
+        for i in range(n_samples):
+            gyro_x, gyro_y, gyro_z = self.read_gyro()
+            ret.append([gyro_x, gyro_y, gyro_z])
+        return np.mean(ret, axis=0)
+
+    def sample_accel(self, n_samples=100):
+        ret = []
+        for i in range(n_samples):
+            accel_x, accel_y, accel_z = self.read_accel()
+            ret.append([accel_x, accel_y, accel_z])
+        return np.mean(ret, axis=0)
+
+    def read_gyro(self):
+        gyro_x = self.read_word_2c(GYRO_XOUT_H) / 131.0
+        gyro_y = self.read_word_2c(GYRO_YOUT_H) / 131.0
+        gyro_z = self.read_word_2c(GYRO_ZOUT_H) / 131.0
+        return gyro_x, gyro_y, gyro_z
+
+    def read_accel(self):
+        accel_x = self.read_word_2c(ACCEL_XOUT_H) / 16384.0
+        accel_y = self.read_word_2c(ACCEL_YOUT_H) / 16384.0
+        accel_z = self.read_word_2c(ACCEL_ZOUT_H) / 16384.0
+        return accel_x, accel_y, accel_z
 
     def publish_temp(self, timer_event):
         temp_msg = Temperature()
