@@ -8,7 +8,7 @@
     <mesh filename="package://create_description/meshes/shoebot_collision.stl" scale="${M_SCALE} ${M_SCALE} ${M_SCALE}"/>
   </xacro:create_base>
 
-    <link name="laser">
+    <link name="laser_link">
         <inertial>
             <mass value="0.00833634573995571"/>
             <inertia ixx="1.01866461240801E-06" ixy="-5.88447626567756E-08" ixz="7.83857244757914E-08"
@@ -19,11 +19,11 @@
 
     <joint name="base_to_laser" type="fixed">
         <parent link="base_link"/>
-        <child link="laser"/>
+        <child link="laser_link"/>
         <origin xyz="-0.091987 0 0.5" rpy="0 0 0"/>
     </joint>
 
-    <link name="camera1">
+    <link name="camera1_link">
         <inertial>
             <mass value="0.00833634573995571"/>
             <inertia ixx="1.01866461240801E-06" ixy="-5.88447626567756E-08" ixz="7.83857244757914E-08"
@@ -34,11 +34,11 @@
 
     <joint name="base_to_camera1" type="fixed">
         <parent link="base_link"/>
-        <child link="camera1"/>
+        <child link="camera1_link"/>
         <origin xyz="-0.041986 0 0.454529" rpy="0 0 0"/>
     </joint>
 
-    <link name="camera2">
+    <link name="camera2_link">
         <inertial>
             <mass value="0.00833634573995571"/>
             <inertia ixx="1.01866461240801E-06" ixy="-5.88447626567756E-08" ixz="7.83857244757914E-08"
@@ -49,7 +49,7 @@
 
     <joint name="base_to_camera2" type="fixed">
         <parent link="base_link"/>
-        <child link="camera2"/>
+        <child link="camera2_link"/>
         <origin xyz="-0.053586 0 0.43102" rpy="0 0.523599 0"/>
     </joint>
 

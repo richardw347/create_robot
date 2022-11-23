@@ -59,6 +59,8 @@ static const double COVARIANCE[36] = {1e-5, 1e-5, 0.0,  0.0,  0.0,  1e-5,  // NO
                                       0.0,  0.0,  0.0,  0.0,  1e-5, 0.0,
                                       1e-5, 1e-5, 0.0,  0.0,  0.0,  1e-5};
 
+static const float KEEP_ALIVE_PERIOD = 300.0f;
+
 class CreateDriver
 {
 private:
@@ -102,7 +104,7 @@ private:
   ros::Publisher bumper_pub_;
   ros::Publisher wheeldrop_pub_;
   ros::Publisher wheel_joint_pub_;
-
+ 
   tf2_ros::TransformBroadcaster tf_broadcaster_;
 
   diagnostic_updater::Updater diagnostics_;
@@ -112,6 +114,7 @@ private:
   create_msgs::Bumper bumper_msg_;
   nav_msgs::Odometry odom_msg_;
   geometry_msgs::TransformStamped tf_odom_;
+  ros::Time last_keep_alive_;
   ros::Time last_cmd_vel_time_;
   std_msgs::Empty empty_msg_;
   std_msgs::Float32 float32_msg_;
@@ -158,6 +161,7 @@ private:
   void publishMode();
   void publishBumperInfo();
   void publishWheeldrop();
+  void handleKeepAlive();
 
 public:
   explicit CreateDriver(ros::NodeHandle& nh);

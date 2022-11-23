@@ -1,5 +1,5 @@
 <launch>
-	<node pkg="tf" type="static_transform_publisher" name="base_to_laser" args="-0.1 0 0.42 0 0 0 /base_link /laser_link 100" />
+	<!-- <node pkg="tf" type="static_transform_publisher" name="base_to_laser" args="-0.1 0 0.42 0 0 0 /base_link /laser_link 100" /> -->
 
     <node pkg="urg_node" type="urg_node" name="urg_node" output="screen">
         <param name="serial_port" value="/dev/shoebot/hokuyo_laser"/>
