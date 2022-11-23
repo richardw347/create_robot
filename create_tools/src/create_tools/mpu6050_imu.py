@@ -8,7 +8,6 @@ from sensor_msgs.msg import Temperature, Imu
 from tf.transformations import quaternion_about_axis
 from registers import (
     PWR_MGMT_1,
-    PWR_MGMT_2,
     ACCEL_XOUT_H,
     ACCEL_YOUT_H,
     ACCEL_ZOUT_H,
