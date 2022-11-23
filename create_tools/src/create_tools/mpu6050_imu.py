@@ -119,13 +119,13 @@ class MPU6050:
         o = imu_msg.orientation
         o.x, o.y, o.z, o.w = orientation
 
-        imu_msg.linear_acceleration.x = accel_x
-        imu_msg.linear_acceleration.y = accel_y
-        imu_msg.linear_acceleration.z = accel_z
+        imu_msg.linear_acceleration.x = accel_x - self.accel_offset[0]
+        imu_msg.linear_acceleration.y = accel_y - self.accel_offset[1]
+        imu_msg.linear_acceleration.z = accel_z - self.accel_offset[2]
 
-        imu_msg.angular_velocity.x = gyro_x
-        imu_msg.angular_velocity.y = gyro_y
-        imu_msg.angular_velocity.z = gyro_z
+        imu_msg.angular_velocity.x = gyro_x - self.gyro_offset[0]
+        imu_msg.angular_velocity.y = gyro_y - self.gyro_offset[1]
+        imu_msg.angular_velocity.z = gyro_z - self.gyro_offset[2]
 
         imu_msg.header.stamp = rospy.Time.now()
 
