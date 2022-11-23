@@ -121,7 +121,7 @@ class MPU6050:
 
         imu_msg.linear_acceleration.x = accel_x - self.accel_offset[0]
         imu_msg.linear_acceleration.y = accel_y - self.accel_offset[1]
-        imu_msg.linear_acceleration.z = accel_z - self.accel_offset[2]
+        imu_msg.linear_acceleration.z = accel_z
 
         imu_msg.angular_velocity.x = gyro_x - self.gyro_offset[0]
         imu_msg.angular_velocity.y = gyro_y - self.gyro_offset[1]
