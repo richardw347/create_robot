@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import smbus
 import rospy
@@ -31,10 +31,10 @@ class MPU6050:
 
         self.bus.write_byte_data(self.address, PWR_MGMT_1, 0)
 
-        self.temp_pub = rospy.Publisher("temperature", Temperature)
+        self.temp_pub = rospy.Publisher("imu/temp", Temperature)
         self.imu_pub = rospy.Publisher("imu/data", Imu)
-        self.imu_timer = rospy.Timer(rospy.Duration(0.02), publish_imu)
-        self.temp_timer = rospy.Timer(rospy.Duration(10), publish_temp)
+        self.imu_timer = rospy.Timer(rospy.Duration(0.02), self.publish_imu)
+        self.temp_timer = rospy.Timer(rospy.Duration(10), self.publish_temp)
 
     # read_word and read_word_2c from
     # http://blog.bitify.co.uk/2013/11/reading-data-from-mpu-6050-on-raspberry.html
@@ -45,7 +45,7 @@ class MPU6050:
         return val
 
     def read_word_2c(self, register):
-        val = read_word(register)
+        val = self.read_word(register)
         if val >= 0x8000:
             return -((65535 - val) + 1)
         else:
