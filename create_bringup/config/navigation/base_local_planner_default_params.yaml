@@ -1,3 +1,22 @@
+GracefulControllerROS:
+  max_vel_x: 0.33
+  min_vel_x: 0.1
+
+  max_vel_theta: 2.0
+  min_vel_theta: 0.3
+  min_in_place_vel_theta: 0.6
+
+  acc_lim_x: 0.6
+  acc_lim_theta: 1.0
+
+  yaw_goal_tolerance: 0.1
+  xy_goal_tolerance: 0.1
+
+  max_lookahead: 1.25
+  initial_rotate_tolerance: 0.25
+  prefer_final_rotation: true
+  yaw_filter_tolerance: 0.785
+
 DWAPlannerROS:
   max_vel_trans: 0.3
   min_vel_trans: 0.01

@@ -19,5 +19,3 @@ obstacle_layer:
     inf_is_valid: true
     observation_persistence: 0.1
 
-static_layer:
-  enabled: true
