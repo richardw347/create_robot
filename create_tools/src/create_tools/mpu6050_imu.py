@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import smbus
+import math
 import time
 import rospy
 import numpy as np
@@ -123,9 +124,9 @@ class MPU6050:
         imu_msg.linear_acceleration.y = accel_y - self.accel_offset[1]
         imu_msg.linear_acceleration.z = accel_z
 
-        imu_msg.angular_velocity.x = gyro_x - self.gyro_offset[0]
-        imu_msg.angular_velocity.y = gyro_y - self.gyro_offset[1]
-        imu_msg.angular_velocity.z = gyro_z - self.gyro_offset[2]
+        imu_msg.angular_velocity.x = math.radians(gyro_x - self.gyro_offset[0])
+        imu_msg.angular_velocity.y = math.radians(gyro_y - self.gyro_offset[1])
+        imu_msg.angular_velocity.z = math.radians(gyro_z - self.gyro_offset[2])
 
         imu_msg.header.stamp = rospy.Time.now()
 
