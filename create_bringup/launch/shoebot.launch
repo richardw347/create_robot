@@ -14,5 +14,6 @@
   <include file="$(find create_bringup)/launch/joy_teleop.launch" />
   <include file="$(find create_bringup)/launch/urg.launch" />
   <include file="$(find create_bringup)/launch/realsense.launch" />
+  <include file="$(find create_tools)/launch/ekf.launch" />
   
 </launch>
