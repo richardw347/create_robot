@@ -18,6 +18,8 @@
       <arg name="tf_prefix"         		value="$(arg tf_prefix_camera1)"/>
       <arg name="initial_reset"         value="$(arg initial_reset)"/>
       <arg name="reconnect_timeout"     value="$(arg reconnect_timeout)"/>
+      <arg name="color_width"           default="1920"/>
+      <arg name="color_height"          default="1080"/>
     </include>
   </group>
 
