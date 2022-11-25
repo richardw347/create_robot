@@ -32,11 +32,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <string>
 
 CreateDriver::CreateDriver(ros::NodeHandle& nh)
-  : model_(create::RobotModel::CREATE_2),
-    nh_(nh),
-    priv_nh_("~"),
-    diagnostics_(),
-    is_running_slowly_(false)
+  : model_(create::RobotModel::CREATE_2), nh_(nh), priv_nh_("~"), diagnostics_(), is_running_slowly_(false)
 {
   std::string robot_model_name;
   priv_nh_.param<std::string>("dev", dev_, "/dev/ttyUSB0");
@@ -174,7 +170,6 @@ void CreateDriver::handleKeepAlive()
   }
 }
 
-
 void CreateDriver::cmdVelCallback(const geometry_msgs::TwistConstPtr& msg)
 {
   robot_->drive(msg->linear.x, msg->angular.z);
@@ -252,7 +247,7 @@ void CreateDriver::setASCIICallback(const std_msgs::UInt8MultiArrayConstPtr& msg
 
 void CreateDriver::dockCallback(const std_msgs::EmptyConstPtr& msg)
 {
-  (void) msg;
+  (void)msg;
 
   robot_->setMode(create::MODE_PASSIVE);
 
@@ -265,7 +260,7 @@ void CreateDriver::dockCallback(const std_msgs::EmptyConstPtr& msg)
 
 void CreateDriver::undockCallback(const std_msgs::EmptyConstPtr& msg)
 {
-  (void) msg;
+  (void)msg;
 
   // Switch robot back to FULL mode
   robot_->setMode(create::MODE_FULL);
@@ -685,6 +680,9 @@ void CreateDriver::spin()
       ROS_WARN("[CREATE] Loop running slowly.");
     }
   }
+  // set mode to passive on exit
+  ROS_INFO("[CREATE] Setting to passive mode on exit");
+  robot_->setMode(create::MODE_PASSIVE);
 }
 
 int main(int argc, char** argv)
