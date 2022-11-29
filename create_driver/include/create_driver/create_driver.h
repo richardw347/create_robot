@@ -51,15 +51,16 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <tf2_ros/transform_broadcaster.h>
 
 #include <string>
+#include <signal.h>
 
-static const double COVARIANCE[36] = {1e-5, 1e-5, 0.0,  0.0,  0.0,  1e-5,  // NOLINT(whitespace/braces)
-                                      1e-5, 1e-5, 0.0,  0.0,  0.0,  1e-5,
-                                      0.0,  0.0,  1e-5, 0.0,  0.0,  0.0,
-                                      0.0,  0.0,  0.0,  1e-5, 0.0,  0.0,
-                                      0.0,  0.0,  0.0,  0.0,  1e-5, 0.0,
-                                      1e-5, 1e-5, 0.0,  0.0,  0.0,  1e-5};
+static const double COVARIANCE[36] = {
+  1e-5, 1e-5, 0.0, 0.0, 0.0, 1e-5,  // NOLINT(whitespace/braces)
+  1e-5, 1e-5, 0.0, 0.0, 0.0, 1e-5, 0.0, 0.0,  1e-5, 0.0,  0.0,  0.0, 0.0, 0.0, 0.0,
+  1e-5, 0.0,  0.0, 0.0, 0.0, 0.0,  0.0, 1e-5, 0.0,  1e-5, 1e-5, 0.0, 0.0, 0.0, 1e-5
+};
 
 static const float KEEP_ALIVE_PERIOD = 300.0f;
+static bool shutdown_robot = false;
 
 class CreateDriver
 {
@@ -104,7 +105,7 @@ private:
   ros::Publisher bumper_pub_;
   ros::Publisher wheeldrop_pub_;
   ros::Publisher wheel_joint_pub_;
- 
+
   tf2_ros::TransformBroadcaster tf_broadcaster_;
 
   diagnostic_updater::Updater diagnostics_;

@@ -150,6 +150,11 @@ CreateDriver::CreateDriver(ros::NodeHandle& nh)
 
   diagnostics_.setHardwareID(robot_model_name);
 
+  signal(SIGTERM, [](int signal) {
+    ROS_INFO("Received SIGTERM");
+    shutdown_robot = true;
+  });
+
   ROS_INFO("[CREATE] Ready.");
 }
 
@@ -679,15 +684,20 @@ void CreateDriver::spin()
     {
       ROS_WARN("[CREATE] Loop running slowly.");
     }
+
+    if (shutdown_robot)
+    {
+      // set mode to passive on exit
+      ROS_INFO("[CREATE] Setting to passive mode on exit");
+      robot_->setMode(create::MODE_PASSIVE);
+      ros::shutdown();
+    }
   }
-  // set mode to passive on exit
-  ROS_INFO("[CREATE] Setting to passive mode on exit");
-  robot_->setMode(create::MODE_PASSIVE);
 }
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "create_driver");
+  ros::init(argc, argv, "create_driver", ros::init_options::NoSigintHandler);
   ros::NodeHandle nh;
 
   CreateDriver create_driver(nh);
