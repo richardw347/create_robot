@@ -682,7 +682,7 @@ void CreateDriver::spin()
       ROS_WARN("[CREATE] Loop running slowly.");
     }
 
-    if (shutdown_robot)
+    if (shutdown_node)
     {
       // set mode to passive on exit
       ROS_INFO("[CREATE] Setting to passive mode on exit");
@@ -697,19 +697,16 @@ int main(int argc, char** argv)
   ros::init(argc, argv, "create_driver", ros::init_options::NoSigintHandler);
   ros::NodeHandle nh;
 
-  ros::XMLRPCManager::instance()->unbind("shutdown");
-
   CreateDriver create_driver(nh);
 
   signal(SIGINT, [](int signal) {
     ROS_INFO("Received SIGTERM %d", signal);
-    shutdown_robot = true;
+    shutdown_node = true;
   });
 
   try
   {
     create_driver.spin();
-    ROS_INFO("quitting");
   }
   catch (std::runtime_error& ex)
   {
