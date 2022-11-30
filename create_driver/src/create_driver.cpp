@@ -29,6 +29,8 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 
+#include <ros/xmlrpc_manager.h>
+
 #include <string>
 
 CreateDriver::CreateDriver(ros::NodeHandle& nh)
@@ -149,11 +151,6 @@ CreateDriver::CreateDriver(ros::NodeHandle& nh)
   diagnostics_.add("Driver Status", this, &CreateDriver::updateDriverDiagnostics);
 
   diagnostics_.setHardwareID(robot_model_name);
-
-  signal(SIGTERM, [](int signal) {
-    ROS_INFO("Received SIGTERM");
-    shutdown_robot = true;
-  });
 
   ROS_INFO("[CREATE] Ready.");
 }
@@ -700,11 +697,19 @@ int main(int argc, char** argv)
   ros::init(argc, argv, "create_driver", ros::init_options::NoSigintHandler);
   ros::NodeHandle nh;
 
+  ros::XMLRPCManager::instance()->unbind("shutdown");
+
   CreateDriver create_driver(nh);
+
+  signal(SIGINT, [](int signal) {
+    ROS_INFO("Received SIGTERM %d", signal);
+    shutdown_robot = true;
+  });
 
   try
   {
     create_driver.spin();
+    ROS_INFO("quitting");
   }
   catch (std::runtime_error& ex)
   {

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="config" default="$(find create_bringup)/config/default.yaml" />
+  <arg name="config" default="$(find create_bringup)/config/shoebot.yaml" />
   <arg name="desc" default="true" />
 
   <node name="create_driver" pkg="create_driver" type="create_driver" output="screen">
