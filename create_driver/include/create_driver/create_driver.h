@@ -60,7 +60,7 @@ static const double COVARIANCE[36] = {
 };
 
 static const float KEEP_ALIVE_PERIOD = 300.0f;
-static bool shutdown_robot = false;
+volatile sig_atomic_t shutdown_node = false;
 
 class CreateDriver
 {
