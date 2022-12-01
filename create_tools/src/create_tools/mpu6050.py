@@ -17,43 +17,30 @@ from registers import (
     GYRO_YOUT_H,
     GYRO_ZOUT_H,
 )
+from device_handler import DeviceHandler
+
+DEFAULT_ADDRESS = 0x68
 
 # Based on https://github.com/OSUrobotics/mpu_6050_driver
 # by OSURobotics
 
 
-class MPU6050:
-    def __init__(self):
-        self.bus = smbus.SMBus(rospy.get_param("~bus", 1))
-        self.address = rospy.get_param("~device_address", 0x68)
-        if type(self.address) == str:
-            self.address = int(self.address, 16)
-
+class MPU6050Handler(DeviceHandler):
+    def __init__(self, bus, hz, address=DEFAULT_ADDRESS):
+        super().__init__(bus, address, hz)
         self.imu_frame = rospy.get_param("~imu_frame", "imu_link")
+        self.temp_pub = rospy.Publisher("imu/temp", Temperature, queue_size=5)
+        self.imu_pub = rospy.Publisher("imu/data_raw", Imu, queue_size=5)
 
+    def init_device(self):
+        rospy.loginfo("Initializing MPU6050")
         self.bus.write_byte_data(self.address, PWR_MGMT_1, 0)
         time.sleep(0.1)
         self.calibrate()
 
-        self.temp_pub = rospy.Publisher("imu/temp", Temperature, queue_size=5)
-        self.imu_pub = rospy.Publisher("imu/data_raw", Imu, queue_size=5)
-        self.imu_timer = rospy.Timer(rospy.Duration(0.02), self.publish_imu)
-        self.temp_timer = rospy.Timer(rospy.Duration(10), self.publish_temp)
-
-    # read_word and read_word_2c from
-    # http://blog.bitify.co.uk/2013/11/reading-data-from-mpu-6050-on-raspberry.html
-    def read_word(self, register):
-        high = self.bus.read_byte_data(self.address, register)
-        low = self.bus.read_byte_data(self.address, register + 1)
-        val = (high << 8) + low
-        return val
-
-    def read_word_2c(self, register):
-        val = self.read_word(register)
-        if val >= 0x8000:
-            return -((65535 - val) + 1)
-        else:
-            return val
+    def execute(self):
+        if super().execute():
+            self.publish_imu()
 
     def calibrate(self, n_samples=100):
         self.gyro_offset = self.sample_gyro(n_samples)
@@ -87,14 +74,7 @@ class MPU6050:
         accel_z = self.read_word_2c(ACCEL_ZOUT_H) / 16384.0
         return accel_x, accel_y, accel_z
 
-    def publish_temp(self, timer_event):
-        temp_msg = Temperature()
-        temp_msg.header.frame_id = self.imu_frame
-        temp_msg.temperature = self.read_word_2c(TEMP_H) / 340.0 + 36.53
-        temp_msg.header.stamp = rospy.Time.now()
-        self.temp_pub.publish(temp_msg)
-
-    def publish_imu(self, timer_event):
+    def publish_imu(self):
         imu_msg = Imu()
         imu_msg.header.frame_id = self.imu_frame
 
@@ -131,9 +111,3 @@ class MPU6050:
         imu_msg.header.stamp = rospy.Time.now()
 
         self.imu_pub.publish(imu_msg)
-
-
-if __name__ == "__main__":
-    rospy.init_node("imu_node")
-    mpu = MPU6050()
-    rospy.spin()
