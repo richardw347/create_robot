@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import smbus
 import rospy
 from mpu6050 import MPU6050Handler

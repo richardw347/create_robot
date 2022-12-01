@@ -7,6 +7,8 @@ class DeviceHandler(ABC):
     def __init__(self, bus, hz, address):
         self.bus = bus
         self.address = address
+        if type(self.address) == str:
+            self.address = int(self.address, 16)
         self.last_time = rospy.rostime.get_rostime()
         self.sleep_dur = rospy.rostime.Duration(0, int(1e9 / hz))
 

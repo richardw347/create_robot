@@ -15,7 +15,7 @@ DEFAULT_ADDRESS = 0x68
 
 class TemperatureHandler(DeviceHandler):
     def __init__(self, bus, hz, address=DEFAULT_ADDRESS):
-        super().__init__(bus, address, hz)
+        super().__init__(bus, hz, address)
         self.imu_frame = rospy.get_param("~imu_frame", "imu_link")
         self.temp_pub = rospy.Publisher("imu/temp", Temperature, queue_size=5)
 
@@ -26,6 +26,7 @@ class TemperatureHandler(DeviceHandler):
 
     def execute(self):
         if super().execute():
+            rospy.loginfo("Publishing temperature data")
             self.publish_temp()
 
     def publish_temp(self):

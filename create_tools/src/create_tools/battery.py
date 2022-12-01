@@ -9,7 +9,7 @@ DEFAULT_ADDRESS = 0x36
 
 class BatteryHandler(DeviceHandler):
     def __init__(self, bus, hz, address=DEFAULT_ADDRESS):
-        super().__init__(bus, address, hz)
+        super().__init__(bus, hz, address)
         self.cap_pub = rospy.Publisher("battery/capacity", Float32, queue_size=5)
         self.volt_pub = rospy.Publisher("battery/voltage", Float32, queue_size=5)
 

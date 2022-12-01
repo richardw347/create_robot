@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import smbus
 import math
 import time
@@ -27,19 +25,20 @@ DEFAULT_ADDRESS = 0x68
 
 class MPU6050Handler(DeviceHandler):
     def __init__(self, bus, hz, address=DEFAULT_ADDRESS):
-        super().__init__(bus, address, hz)
+        super().__init__(bus, hz, address)
         self.imu_frame = rospy.get_param("~imu_frame", "imu_link")
         self.temp_pub = rospy.Publisher("imu/temp", Temperature, queue_size=5)
         self.imu_pub = rospy.Publisher("imu/data_raw", Imu, queue_size=5)
 
     def init_device(self):
-        rospy.loginfo("Initializing MPU6050")
+        rospy.loginfo(f"Initializing MPU6050 at address: {self.address}")
         self.bus.write_byte_data(self.address, PWR_MGMT_1, 0)
         time.sleep(0.1)
         self.calibrate()
 
     def execute(self):
         if super().execute():
+            rospy.loginfo("Publishing IMU data")
             self.publish_imu()
 
     def calibrate(self, n_samples=100):
