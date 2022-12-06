@@ -1,6 +1,6 @@
 <launch>
 
-  <node name="mpu_6050" pkg="create_tools" type="mpu6050_imu.py" output="screen">
+  <node name="mpu_6050" pkg="create_tools" type="i2c_bus_node.py" output="screen">
     <param name="imu_frame" value="base_link" />
   </node>
 
