@@ -26,7 +26,7 @@ class TemperatureHandler(DeviceHandler):
 
     def execute(self):
         if super().execute():
-            rospy.loginfo("Publishing temperature data")
+            rospy.logdebug("Publishing temperature data")
             self.publish_temp()
 
     def publish_temp(self):

@@ -18,7 +18,7 @@ class BatteryHandler(DeviceHandler):
 
     def execute(self):
         if super().execute():
-            rospy.loginfo("Publishing battery data")
+            rospy.logdebug("Publishing battery data")
             self.last_time = rospy.rostime.get_rostime()
             voltage = self.read_voltage()
             capacity = self.read_capacity()
