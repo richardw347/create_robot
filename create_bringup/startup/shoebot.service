@@ -1,0 +1,13 @@
+[Unit]
+Description=shoebot startup service
+
+[Service]
+Type=forking
+User=jetson
+TimeoutStartSec=20
+ExecStart=/home/jetson/ros/src/create_robot/create_bringup/startup/scripts/shoebot_service.sh start 
+ExecStop=/home/jetson/ros/src/create_robot/create_bringup/startup/scripts/shoebot_service.sh stop 
+
+[Install]
+WantedBy=multi-user.target
+
