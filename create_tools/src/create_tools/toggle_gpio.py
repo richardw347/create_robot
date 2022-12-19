@@ -6,7 +6,7 @@ import RPi.GPIO as GPIO
 
 
 PIN = 18
-JOY_BUTTON = 5
+JOY_BUTTON = 1
 SAFETY_TIMER = 2
 
 
