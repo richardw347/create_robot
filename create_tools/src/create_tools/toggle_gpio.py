@@ -21,8 +21,7 @@ class ToggleGPIO:
         )
 
     def set_pin(self, pin, state):
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(pin, GPIO.OUT)
+
         if state:
             GPIO.output(pin, GPIO.HIGH)
             if self.timer is not None:
@@ -50,6 +49,8 @@ class ToggleGPIO:
 
 if __name__ == "__main__":
     rospy.init_node("toogle_gpio")
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(PIN, GPIO.OUT, initial=GPIO.LOW)
     toggle = ToggleGPIO()
     print(f"Ready toggle GPIO service on pin: {PIN}.")
     rospy.spin()
