@@ -10,18 +10,20 @@ DEFAULT_ADDRESS = 0x36
 class BatteryHandler(DeviceHandler):
     def __init__(self, bus, hz, address=DEFAULT_ADDRESS):
         super().__init__(bus, hz, address)
-        self.cap_pub = rospy.Publisher("battery/capacity", Float32, queue_size=5)
-        self.volt_pub = rospy.Publisher("battery/voltage", Float32, queue_size=5)
+        self.cap_pub = rospy.Publisher("jetson_battery/capacity", Float32, queue_size=5)
+        self.volt_pub = rospy.Publisher("jetson_battery/voltage", Float32, queue_size=5)
 
     def init_device(self):
         rospy.loginfo("Initializing Battery")
 
     def execute(self):
         if super().execute():
-            rospy.loginfo("Publishing battery data")
+            rospy.logdebug("Publishing battery data")
             self.last_time = rospy.rostime.get_rostime()
             voltage = self.read_voltage()
             capacity = self.read_capacity()
+            crate = self.read_charge_rate()
+            print("Charge Rate: {} mW".format(crate))
             self.cap_pub.publish(Float32(capacity))
             self.volt_pub.publish(Float32(voltage))
 
@@ -36,3 +38,9 @@ class BatteryHandler(DeviceHandler):
         swapped = struct.unpack("<H", struct.pack(">H", read))[0]
         capacity = swapped / 256
         return capacity
+
+    def read_charge_rate(self):
+        read = self.bus.read_word_data(self.address, 0x16)
+        swapped = struct.unpack("<H", struct.pack(">H", read))[0]
+        crate = swapped * 0.208
+        return crate

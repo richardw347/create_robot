@@ -38,7 +38,7 @@ class MPU6050Handler(DeviceHandler):
 
     def execute(self):
         if super().execute():
-            rospy.loginfo("Publishing IMU data")
+            rospy.logdebug("Publishing IMU data")
             self.publish_imu()
 
     def calibrate(self, n_samples=100):
