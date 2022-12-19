@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import rospy
 from std_srvs.srv import SetBool, SetBoolResponse, SetBoolRequest
 from sensor_msgs.msg import Joy
@@ -34,15 +34,15 @@ class ToggleGPIO:
 
     def handle_toggle_pin_service(self, req):
         assert isinstance(req, SetBoolRequest)
-        self.set_pin(PIN, req.data)
+        self.set_pin(PIN, not req.data)
         return SetBoolResponse(True, "Success")
 
     def handle_joy_msg(self, msg):
         assert isinstance(msg, Joy)
         if msg.buttons[JOY_BUTTON] == 1:
-            self.set_pin(PIN, True)
-        else:
             self.set_pin(PIN, False)
+        else:
+            self.set_pin(PIN, True)
 
     def handle_timer_event(self, event):
         self.set_pin(PIN, False)
