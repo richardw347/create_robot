@@ -20,7 +20,7 @@ class ToggleGPIO:
             "toggle_gpio", SetBool, self.handle_toggle_pin_service
         )
 
-    def toggle_pin(self, pin, state):
+    def set_pin(self, pin, state):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(pin, GPIO.OUT)
         if state:
@@ -31,23 +31,21 @@ class ToggleGPIO:
                 )
         else:
             GPIO.output(pin, GPIO.LOW)
-        rospy.loginfo(f"Turning on pin {pin}")
-        GPIO.output(pin, GPIO.HIGH)
 
     def handle_toggle_pin_service(self, req):
         assert isinstance(req, SetBoolRequest)
-        self.toggle_pin(PIN, req.data)
+        self.set_pin(PIN, req.data)
         return SetBoolResponse(True, "Success")
 
     def handle_joy_msg(self, msg):
         assert isinstance(msg, Joy)
         if msg.buttons[JOY_BUTTON] == 1:
-            self.toggle_pin(PIN, True)
+            self.set_pin(PIN, True)
         else:
-            self.toggle_pin(PIN, False)
+            self.set_pin(PIN, False)
 
     def handle_timer_event(self, event):
-        self.toggle_pin(PIN, False)
+        self.set_pin(PIN, False)
 
 
 if __name__ == "__main__":
