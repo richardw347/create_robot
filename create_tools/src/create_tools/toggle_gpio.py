@@ -53,3 +53,4 @@ if __name__ == "__main__":
     toggle = ToggleGPIO()
     print(f"Ready toggle GPIO service on pin: {PIN}.")
     rospy.spin()
+    GPIO.cleanup()
