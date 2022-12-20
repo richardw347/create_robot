@@ -27,7 +27,8 @@ class ToggleGPIO:
 
     def setup_pin(self):
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(self.pin, GPIO.OUT, initial=GPIO.LOW)
+        initial_state = GPIO.HIGH if self.invert else GPIO.LOW
+        GPIO.setup(self.pin, GPIO.OUT, initial=initial_state)
 
     def set_pin(self, pin, state):
 
@@ -64,7 +65,7 @@ if __name__ == "__main__":
     pin = rospy.get_param("~pin", DEFAULT_PIN)
     joy_button = rospy.get_param("~joy_button", DEFAULT_JOY_BUTTON)
     safety_timeout = rospy.get_param("~safety_timeout", DEFAULT_SAFETY_TIMEOUT)
-    invert = rospy.get_param("~invert", True)
+    invert = rospy.get_param("~invert", False)
     toggle = ToggleGPIO(pin, joy_button, safety_timeout, invert)
     print(f"Ready toggle GPIO service on pin: {pin}.")
     rospy.spin()
