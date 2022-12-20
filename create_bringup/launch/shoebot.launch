@@ -15,5 +15,10 @@
   <include file="$(find create_bringup)/launch/urg.launch" />
   <include file="$(find create_bringup)/launch/realsense.launch" />
   <include file="$(find create_tools)/launch/ekf.launch" />
+
+  <node name="toggle_gpio" pkg="create_tools" type="toggle_gpio.py" output="screen">
+    <param name="invert" value="True" />
+  </node>
+
   
 </launch>
