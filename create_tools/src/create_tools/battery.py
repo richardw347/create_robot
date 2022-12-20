@@ -22,8 +22,6 @@ class BatteryHandler(DeviceHandler):
             self.last_time = rospy.rostime.get_rostime()
             voltage = self.read_voltage()
             capacity = self.read_capacity()
-            crate = self.read_charge_rate()
-            print("Charge Rate: {} mW".format(crate))
             self.cap_pub.publish(Float32(capacity))
             self.volt_pub.publish(Float32(voltage))
 
@@ -39,8 +37,3 @@ class BatteryHandler(DeviceHandler):
         capacity = swapped / 256
         return capacity
 
-    def read_charge_rate(self):
-        read = self.bus.read_word_data(self.address, 0x16)
-        swapped = struct.unpack("<H", struct.pack(">H", read))[0]
-        crate = swapped * 0.208
-        return crate
